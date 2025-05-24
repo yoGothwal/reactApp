@@ -1,27 +1,28 @@
 import { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import axios from "axios";
-const Registration = () => {
+
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = () => {
-    console.log("Register button clicked");
+  const handleLogin = () => {
+    console.log("Login button clicked");
     if (!username || !password) {
       console.error("Username and password are required");
       return;
     }
     axios
-      .post("/api/register", { username, password })
+      .post("/api/login", { username, password })
       .then((response) => {
-        console.log("Registration successful:", response.data);
-        navigate("/login");
+        console.log("Login successful:", response.data);
+        navigate("/dashboard");
       })
       .catch((error) => {
         console.error(
-          "Registration failed:",
+          "Login failed:",
           error.response ? error.response.data : error.message
         );
       });
@@ -34,10 +35,10 @@ const Registration = () => {
         minWidth: 400,
         p: 4,
         boxShadow: 6,
-        backdropFilter: "blur(10px)",
         //borderRadius: 4,
         //background: "rgba(35,37,38,0.85)", // dark glass effect
-        // border: "1px solid rgba(255,215,100,0.25)", // subtle gold border
+        backdropFilter: "blur(10px)",
+        //border: "1px solid rgba(255,215,100,0.25)", // subtle gold border
         display: "flex",
         flexDirection: "column",
         gap: 2,
@@ -48,24 +49,24 @@ const Registration = () => {
         align="center"
         gutterBottom
         sx={{
-          color: "white", // gold
+          color: "white",
           textShadow: "0 2px 8px rgba(255,215,0,0.2)",
           fontWeight: 700,
           letterSpacing: 2,
         }}
       >
-        Registration
+        Login
       </Typography>
       <TextField
-        label="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        label="Username"
         variant="outlined"
         fullWidth
         sx={{
           "& .MuiOutlinedInput-root": {
-            color: "#fff", // input text color
-            "& fieldset": { borderColor: "#ffd700" }, // gold border
+            color: "#fff",
+            "& fieldset": { borderColor: "#ffd700" },
             "&:hover fieldset": { borderColor: "#fff" },
             "&.Mui-focused fieldset": { borderColor: "#fff" },
             "& input::placeholder": { color: "#fff", opacity: 1 },
@@ -77,16 +78,16 @@ const Registration = () => {
         }}
       />
       <TextField
-        label="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        label="Password"
         variant="outlined"
         fullWidth
         type="password"
         sx={{
           "& .MuiOutlinedInput-root": {
             color: "#fff",
-            "& fieldset": { borderColor: "#ffd700" }, // gold border
+            "& fieldset": { borderColor: "#ffd700" },
             "&:hover fieldset": { borderColor: "#fff" },
             "&.Mui-focused fieldset": { borderColor: "#fff" },
             "& input::placeholder": { color: "#fff", opacity: 1 },
@@ -98,7 +99,7 @@ const Registration = () => {
         }}
       />
       <Button
-        onClick={handleRegister}
+        onClick={handleLogin}
         variant="contained"
         sx={{
           background: "linear-gradient(90deg, #ffd700 0%, #fffbe6 100%)",
@@ -110,10 +111,10 @@ const Registration = () => {
           },
         }}
       >
-        Register
+        Login
       </Button>
     </Box>
   );
 };
 
-export default Registration;
+export default Login;
