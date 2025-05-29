@@ -6,7 +6,7 @@ const Profile = () => {
   return (
     <Box
       sx={{
-        minWidth: 400,
+        minWidth: { md: 400 },
         p: 4,
         boxShadow: 6,
         //borderRadius: 4,

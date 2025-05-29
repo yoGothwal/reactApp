@@ -6,11 +6,11 @@ const Dashboard = () => {
   return (
     <Box
       sx={{
-        minWidth: 400,
+        minWidth: { md: 400 },
         p: 4,
         boxShadow: 6,
         //borderRadius: 4,
-        //background: "rgba(35,37,38,0.85)", // dark glass effect
+        //background:use "rgba(35,37,38,0.85)", // dark glass effect
         backdropFilter: "blur(10px)",
         //border: "1px solid rgba(255,215,100,0.25)", // subtle gold border
         display: "flex",
