@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
+const API_BASE_URL = import.meta.env.PROD
+  ? "https://your-backend-domain.com"
+  : "/api";
+
 const Registration = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +18,7 @@ const Registration = () => {
       return;
     }
     axios
-      .post("/api/register", { username, password })
+      .post(`${API_BASE_URL}/register`, { username, password })
       .then((response) => {
         console.log("Registration successful:", response.data);
         navigate("/login");

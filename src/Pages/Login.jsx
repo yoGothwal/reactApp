@@ -15,7 +15,7 @@ const Login = () => {
       return;
     }
     axios
-      .post("/api/login", { username, password })
+      .post(`${API_BASE_URL}/login`, { username, password })
       .then((response) => {
         console.log("Login successful:", response.data);
         navigate("/dashboard");
