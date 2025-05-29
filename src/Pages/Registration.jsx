@@ -35,7 +35,7 @@ const Registration = () => {
   return (
     <Box
       sx={{
-        minWidth: 400,
+        //minWidth: 400,
         p: 4,
         boxShadow: 6,
         backdropFilter: "blur(10px)",
