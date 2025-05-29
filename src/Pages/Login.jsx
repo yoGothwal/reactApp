@@ -2,6 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
+const API_BASE_URL = import.meta.env.PROD
+  ? "https://firstapp-3gem.onrender.com"
+  : "/api";
 
 const Login = () => {
   const [username, setUsername] = useState("");

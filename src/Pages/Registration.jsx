@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
 const API_BASE_URL = import.meta.env.PROD
-  ? "https://your-backend-domain.com"
+  ? "https://firstapp-3gem.onrender.com"
   : "/api";
 
 const Registration = () => {
