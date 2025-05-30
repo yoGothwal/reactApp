@@ -1,8 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import LogoutButton from "../Components/LogOutButton";
+import LogoutButton from "../Components/LogoutButton";
 const Profile = () => {
-  const navigate = useNavigate();
   return (
     <Box
       sx={{
