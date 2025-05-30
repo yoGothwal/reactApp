@@ -1,5 +1,7 @@
 import "./App.css";
 import { useNavigate, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Registration from "./Pages/Registration";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
@@ -84,6 +86,11 @@ const Hello = () => {
   );
 };
 const App = () => {
+  useEffect(() => {
+    if (location.pathname === "/login" || location.pathname === "/register") {
+      localStorage.clear();
+    }
+  }, [location]);
   return (
     <MainLayout>
       <Routes>

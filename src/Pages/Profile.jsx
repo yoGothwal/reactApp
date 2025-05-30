@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import LogoutButton from "../Components/LogOutButton";
 const Profile = () => {
   const navigate = useNavigate();
   return (
@@ -8,7 +8,7 @@ const Profile = () => {
       sx={{
         minWidth: { md: 400 },
         p: 4,
-        boxShadow: 6,
+        //boxShadow: 6,
         //borderRadius: 4,
         //background: "rgba(35,37,38,0.85)",
         backdropFilter: "blur(10px)",
@@ -42,6 +42,7 @@ const Profile = () => {
       >
         This is your profile page.
       </Typography>
+      <LogoutButton></LogoutButton>
     </Box>
   );
 };

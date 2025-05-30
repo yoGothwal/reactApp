@@ -8,7 +8,7 @@ const Dashboard = () => {
       sx={{
         minWidth: { md: 400 },
         p: 4,
-        boxShadow: 6,
+        //boxShadow: 6,
         //borderRadius: 4,
         //background:use "rgba(35,37,38,0.85)", // dark glass effect
         backdropFilter: "blur(10px)",

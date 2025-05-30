@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
@@ -10,6 +10,9 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const handleLogin = () => {
     console.log("Login button clicked");
@@ -21,6 +24,7 @@ const Login = () => {
       .post(`${API_BASE_URL}/login`, { username, password })
       .then((response) => {
         console.log("Login successful:", response.data);
+        localStorage.setItem("isLoggedIn", "true");
         navigate("/dashboard");
       })
       .catch((error) => {
@@ -37,7 +41,7 @@ const Login = () => {
       sx={{
         minWidth: { md: 400 },
         p: 4,
-        boxShadow: 6,
+        //boxShadow: 6,
         //borderRadius: 4,
         //background: "rgba(35,37,38,0.85)", // dark glass effect
         backdropFilter: "blur(10px)",

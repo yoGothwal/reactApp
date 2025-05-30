@@ -1,26 +1,14 @@
 import { Box } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 
+import Logo from "../Components/Logo";
+import ProfileButton from "../Components/ProfileButton";
 const MainLayout = ({ children }) => {
-  const navigate = useNavigate();
-
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
   return (
     <Box sx={{ position: "relative" }}>
-      {/* User icon at top right */}
-      <Box
-        sx={{
-          position: "fixed",
-          top: 24,
-          right: 32,
-          zIndex: 100,
-          cursor: "pointer",
-        }}
-        onClick={() => navigate("/profile")}
-      >
-        <FontAwesomeIcon icon={faUser} color="#ffd700" size="2x" />
-      </Box>
+      <Logo></Logo>
+      {isLoggedIn && <ProfileButton></ProfileButton>}
+      {/* Main content area */}
       {children}
     </Box>
   );
