@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
-const API_BASE_URL = import.meta.env.PROD
-  ? "https://firstapp-3gem.onrender.com"
-  : "/api";
+// const baseurl = import.meta.env.PROD
+//   ? "https://firstapp-3gem.onrender.com"
+//   : "/api";
+const baseURL = import.meta.env.VITE_API_URL || "/api";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -21,7 +22,7 @@ const Login = () => {
       return;
     }
     axios
-      .post(`${API_BASE_URL}/login`, { username, password })
+      .post(`${baseURL}/login`, { username, password })
       .then((response) => {
         console.log("Login successful:", response.data);
         localStorage.setItem("isLoggedIn", "true");

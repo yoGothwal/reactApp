@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
-const API_BASE_URL = import.meta.env.PROD
-  ? "https://firstapp-3gem.onrender.com"
-  : "/api";
+// const API_BASE_URL = import.meta.env.PROD
+//   ? "https://firstapp-3gem.onrender.com"
+//   : "/api";
+const baseURL = import.meta.env.VITE_API_URL || "/api";
 
 const Registration = () => {
   const [username, setUsername] = useState("");
@@ -21,7 +22,7 @@ const Registration = () => {
       return;
     }
     axios
-      .post(`${API_BASE_URL}/register`, { username, password })
+      .post(`${baseURL}/register`, { username, password })
       .then((response) => {
         console.log("Registration successful:", response.data);
         navigate("/login");

@@ -6,7 +6,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-const baseURL = import.meta.env.VITE_API_URL || "";
+const baseURL = import.meta.env.VITE_API_URL || "/api";
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
@@ -35,7 +35,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     axios
-      .get(`${baseURL}/api/notes`, {
+      .get(`${baseURL}/notes`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -56,7 +56,7 @@ const Dashboard = () => {
     }
     axios
       .post(
-        `${baseURL}/api/notes`,
+        `${baseURL}/notes`,
         { title, content },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -70,7 +70,7 @@ const Dashboard = () => {
         setTitle("");
         setContent("");
         axios
-          .get(`${baseURL}/api/notes`, {
+          .get(`${baseURL}/notes`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -84,7 +84,7 @@ const Dashboard = () => {
   };
   const handleDeleteNote = (id) => {
     axios
-      .delete(`${baseURL}/api/notes/${id}`, {
+      .delete(`${baseURL}/notes/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then(() => {
@@ -101,7 +101,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     Promise.all(
       selectedNotes.map((id) =>
-        axios.delete(`${baseURL}/api/notes/${id}`, {
+        axios.delete(`${baseURL}/notes/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
       )
