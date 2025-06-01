@@ -1,12 +1,12 @@
 import "./App.css";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import Registration from "./Pages/Registration";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import Profile from "./Pages/Profile";
 import MainLayout from "./Pages/MainLayout";
+import EditNote from "./Pages/EditNote";
 import { Box, Button, Typography } from "@mui/material";
 const Hello = () => {
   const navigate = useNavigate();
@@ -86,6 +86,7 @@ const Hello = () => {
   );
 };
 const App = () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
   useEffect(() => {
     if (location.pathname === "/login" || location.pathname === "/register") {
       localStorage.clear();
@@ -100,9 +101,16 @@ const App = () => {
           element={<Registration></Registration>}
         ></Route>
         <Route path="/login" element={<Login></Login>}></Route>
-        <Route path="/dashboard" element={<Dashboard></Dashboard>}></Route>
-        <Route path="/profile" element={<Profile></Profile>}></Route>
+        <Route
+          path="/dashboard"
+          element={isLoggedIn ? <Dashboard></Dashboard> : <Hello></Hello>}
+        ></Route>
+        <Route
+          path="/profile"
+          element={isLoggedIn ? <Profile></Profile> : <Hello></Hello>}
+        ></Route>
         <Route path="*" element={<Hello></Hello>}></Route>
+        <Route path="/notes/edit/:id" element={<EditNote />} />
       </Routes>
     </MainLayout>
   );

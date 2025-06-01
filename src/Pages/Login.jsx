@@ -25,6 +25,11 @@ const Login = () => {
       .then((response) => {
         console.log("Login successful:", response.data);
         localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("username", username);
+        localStorage.setItem("uame", "Example User");
+        localStorage.setItem("email", "example@gmail.com");
+        localStorage.setItem("token", response.data.token);
+        console.log("Token stored in localStorage:", response.data.token);
         navigate("/dashboard");
       })
       .catch((error) => {

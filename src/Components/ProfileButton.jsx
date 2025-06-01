@@ -9,7 +9,7 @@ const ProfileButton = () => {
       <Box
         sx={{
           position: "fixed",
-          top: 30,
+          top: 15,
           right: 30,
           cursor: "pointer",
           zIndex: 1000,
@@ -19,8 +19,9 @@ const ProfileButton = () => {
         <FontAwesomeIcon
           icon={faUser}
           style={{
+            marginTop: "0.5rem",
             fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
-            color: "gold",
+            color: "#ffd700", // gold color
             cursor: "pointer",
           }}
         />

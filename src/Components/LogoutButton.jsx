@@ -13,9 +13,8 @@ const LogoutButton = () => {
       className="fa fa-sign-out"
       onClick={handleLogout}
       style={{
-        // position: "fixed",
-        // bottom: 30,
-        // top: 50,
+        position: "fixed",
+        bottom: -120,
         fontSize: "1.6rem",
         color: "gold",
         cursor: "pointer",

@@ -1,6 +1,16 @@
-import { Box, Typography } from "@mui/material";
-import LogoutButton from "../Components/LogoutButton";
+import { Box, Typography, Avatar, Modal } from "@mui/material";
+import { useState } from "react";
+import LogoutButton from "../Components/LogOutButton";
+import profilePic from "../Images/pic.jpg";
 const Profile = () => {
+  const [open, setOpen] = useState(false);
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const user = {
+    name: localStorage.getItem("name") || "User",
+    username: localStorage.getItem("username") || "Username",
+    email: localStorage.getItem("email") || "Email",
+    photo: profilePic,
+  };
   return (
     <Box
       sx={{
@@ -17,18 +27,58 @@ const Profile = () => {
         alignItems: "center",
       }}
     >
+      <Avatar
+        onClick={() => setOpen(true)}
+        src={user.photo}
+        alt={user.name}
+        sx={{ width: 100, height: 100, mb: 2 }}
+      ></Avatar>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+            backgroundColor: "rgb(0, 0, 0)",
+            outline: "none",
+          }}
+        >
+          <img
+            src={user.photo}
+            alt={user.name}
+            style={{
+              maxWidth: "50vw",
+              maxHeight: "50vh",
+              borderRadius: "16px",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+              cursor: "pointer",
+            }}
+            onClick={() => setOpen(false)}
+          />
+        </Box>
+      </Modal>
       <Typography
-        variant="h4"
+        variant="h5"
         align="center"
-        gutterBottom
         sx={{
-          color: "#ffd700",
-          textShadow: "0 2px 8px rgba(255,215,0,0.2)",
+          color: "gold",
           fontWeight: 700,
-          letterSpacing: 2,
+          letterSpacing: 1,
         }}
       >
-        Profile
+        {user.username}
+      </Typography>
+      <Typography
+        variant="h6"
+        align="center"
+        sx={{
+          color: "white",
+          fontWeight: 700,
+          letterSpacing: 1,
+        }}
+      >
+        {user.name}
       </Typography>
       <Typography
         variant="body1"
@@ -38,9 +88,9 @@ const Profile = () => {
           opacity: 0.85,
         }}
       >
-        This is your profile page.
+        {user.email}
       </Typography>
-      <LogoutButton></LogoutButton>
+      {isLoggedIn && <LogoutButton></LogoutButton>}
     </Box>
   );
 };
