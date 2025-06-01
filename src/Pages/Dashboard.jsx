@@ -9,15 +9,38 @@ import {
 import axios from "axios";
 import { useState, useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  const [selectedNotes, setSelectedNotes] = useState([]);
+  const [favoriteNotes, setFavoriteNotes] = useState([]); // Add this state
+
+  const handleMarkFavorite = (noteId) => {
+    setFavoriteNotes((prev) =>
+      prev.includes(noteId)
+        ? prev.filter((id) => id !== noteId)
+        : [...prev, noteId]
+    );
+  };
+  const handleSelectNote = (noteId) => {
+    setSelectedNotes((prev) =>
+      prev.includes(noteId)
+        ? prev.filter((id) => id !== noteId)
+        : [...prev, noteId]
+    );
+  };
+
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
     axios
       .get("/api/notes", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         setNotes(response.data.notes);
@@ -25,16 +48,9 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("Error fetching notes:", error);
       });
-  }, []);
-  const [expandedNote, setExpandedNote] = useState(null);
+  }, [localStorage.getItem("token")]);
 
-  const getTruncatedContent = (content) => {
-    const words = content.split(" ");
-    if (words.length > 10) {
-      return words.slice(0, 10).join(" ") + " ...";
-    }
-    return content;
-  };
+  const [expandedNote, setExpandedNote] = useState(null);
   console.log("Notes fetched:", notes);
   const handleAddNote = (e) => {
     e.preventDefault();
@@ -57,6 +73,14 @@ const Dashboard = () => {
         }
         setTitle("");
         setContent("");
+        axios
+          .get("/api/notes", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => setNotes(res.data.notes))
+          .catch((err) => console.error("Error fetching notes:", err));
       })
       .catch((error) => {
         console.error("Error adding note:", error);
@@ -77,6 +101,32 @@ const Dashboard = () => {
   const handleEditNote = (note) => {
     window.location.href = `/notes/edit/${note._id}`;
   };
+  const handleDeleteSelected = () => {
+    const token = localStorage.getItem("token");
+    Promise.all(
+      selectedNotes.map((id) =>
+        axios.delete(`/api/notes/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      )
+    )
+      .then(() => {
+        setNotes((prevNotes) =>
+          prevNotes.filter((note) => !selectedNotes.includes(note._id))
+        );
+        setSelectedNotes([]);
+      })
+      .catch((error) => {
+        console.error("Error deleting selected notes:", error);
+      });
+  };
+  const getTruncatedContent = (content) => {
+    const words = content.split(" ");
+    if (words.length > 10) {
+      return words.slice(0, 10).join(" ") + "...";
+    }
+    return content;
+  };
 
   return (
     <Box
@@ -93,33 +143,10 @@ const Dashboard = () => {
         alignItems: "center",
       }}
     >
-      {/* <Typography
-        variant="h4"
-        align="center"
-        sx={{
-          color: "#ffd700",
-          textShadow: "0 2px 8px rgba(255,215,0,0.2)",
-          fontWeight: 700,
-          letterSpacing: 2,
-        }}
-      >
-        Dashboard
-      </Typography> */}
-      {/* <Typography
-        variant="body1"
-        align="center"
-        sx={{
-          color: "#fff",
-          opacity: 0.85,
-        }}
-      >
-        Welcome to your dashboard!
-      </Typography> */}
-
       <Paper
         sx={{
           p: 2,
-          mb: 2,
+          mt: 4,
           width: "100%",
           maxWidth: 500,
           background: "rgba(35,37,38,0.85)", // dark glass effect
@@ -200,80 +227,147 @@ const Dashboard = () => {
       >
         NOTES
       </Typography>
-      {notes.map((note, index) => (
-        <Box
-          key={index}
-          sx={{
-            width: "100%",
-            p: 2,
-            mb: 2,
-            borderRadius: 2,
-            boxShadow: 3,
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(5px)",
-          }}
-        >
+      {notes.map((note, index) => {
+        const isSelected = selectedNotes.includes(note._id);
+        const isFavorite = favoriteNotes.includes(note._id);
+        return (
           <Box
+            key={index}
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              width: "100%",
+              p: 2,
+              mb: 2,
+              borderRadius: 2,
+              boxShadow: 3,
+              backgroundColor: isSelected
+                ? "rgba(255, 215, 0, 0.15)"
+                : "rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(5px)",
+              cursor: "pointer",
+              border: isSelected
+                ? "2px solid #ffd700"
+                : "2px solid transparent",
+              transition: "border 0.2s, background 0.2s",
             }}
+            onClick={() => handleSelectNote(note._id)}
           >
-            <Typography
-              variant="h6"
+            <Box
               sx={{
-                color: "#ffd700",
-                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              {note.title}
-            </Typography>
-            <Box sx={{ display: "block", gap: 1 }}>
-              <IconButton
-                color="black"
-                size="small"
-                onClick={() => handleDeleteNote(note._id)}
-                aria-label="delete"
+              <Typography
+                variant="h6"
+                sx={{
+                  color: "#ffd700",
+                  fontWeight: "bold",
+                }}
               >
-                <DeleteIcon />
-              </IconButton>
-              <IconButton
-                color="black"
-                size="small"
-                onClick={() => handleEditNote(note)}
-                aria-label="edit"
-              >
-                <EditIcon />
-              </IconButton>
+                {note.title}
+              </Typography>
+              {/* Show action buttons only if this note is selected and only one note is selected */}
+              <Box sx={{ display: "flex", gap: 1 }}>
+                {/* Show favorite icon only if not a single note is selected */}
+                {!(selectedNotes.length > 1 && isSelected) && (
+                  <FavoriteIcon
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMarkFavorite(note._id);
+                    }}
+                    sx={{
+                      color: isFavorite ? "#ff1744" : "#aaa",
+                      cursor: "pointer",
+                      fontSize: 24,
+                      transition: "color 0.2s",
+                    }}
+                  />
+                )}
+                {/* Show delete/edit icons only if this note is selected and only one note is selected */}
+                {selectedNotes.length === 1 && isSelected && (
+                  <>
+                    <DeleteIcon
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteNote(note._id);
+                      }}
+                      sx={{
+                        color: "#ff1744",
+                        cursor: "pointer",
+                        fontSize: 24,
+                        transition: "color 0.2s",
+                        "&:hover": { color: "#d50000" },
+                      }}
+                      aria-label="delete"
+                    />
+                    <EditIcon
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditNote(note);
+                      }}
+                      sx={{
+                        color: "#ffd700",
+                        cursor: "pointer",
+                        fontSize: 24,
+                        transition: "color 0.2s",
+                        "&:hover": { color: "#fff176" },
+                      }}
+                      aria-label="edit"
+                    />
+                  </>
+                )}
+              </Box>
             </Box>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "#fff",
+                textAlign: "justify",
+                fontSize: "0.95rem",
+                opacity: 0.85,
+                textIndent: "0.5em",
+                mt: 1,
+                overflow: expandedNote === note._id ? "visible" : "hidden",
+                textOverflow: expandedNote === note._id ? "clip" : "ellipsis",
+                cursor:
+                  note.content.split(" ").length > 10 ? "pointer" : "default",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (note.content.split(" ").length > 10) {
+                  setExpandedNote(expandedNote === note._id ? null : note._id);
+                } else {
+                  setExpandedNote(null);
+                }
+              }}
+            >
+              {expandedNote === note._id
+                ? note.content
+                : getTruncatedContent(note.content)}
+            </Typography>
           </Box>
-          <Typography
-            variant="body2"
-            sx={{
-              color: "#fff",
-              fontSize: "0.95rem",
-              opacity: 0.85,
-              textIndent: "0.5em",
-              mt: 1,
-              whiteSpace: expandedNote === note._id ? "normal" : "nowrap",
-              overflow: expandedNote === note._id ? "visible" : "hidden",
-              textOverflow: expandedNote === note._id ? "clip" : "ellipsis",
-              cursor:
-                note.content.split(" ").length > 10 ? "pointer" : "default",
-            }}
-            onClick={() =>
-              note.content.split(" ").length > 10
-                ? setExpandedNote(expandedNote === note._id ? null : note._id)
-                : undefined
-            }
-          >
-            {expandedNote === note._id
-              ? note.content
-              : getTruncatedContent(note.content)}
-          </Typography>
-        </Box>
-      ))}
+        );
+      })}
+      {/* Show "Delete Selected" button only if more than one note is selected */}
+      {selectedNotes.length > 1 && (
+        <DeleteIcon
+          onClick={handleDeleteSelected}
+          sx={{
+            mt: 2,
+            color: "black",
+            cursor: "pointer",
+            fontSize: 40,
+            transition: "color 0.2s",
+
+            "&:hover": { color: "#d50000" },
+            zIndex: 10,
+            display: "block",
+            mx: "auto",
+          }}
+          aria-label="Delete Selected"
+        />
+      )}
     </Box>
   );
 };

@@ -47,8 +47,9 @@ const EditNote = () => {
         sx={{
           p: 2,
           mb: 2,
-          width: "100%",
-          maxWidth: 500,
+          justifyContent: "center",
+          alignItems: "center", // vertically center
+          width: "280px",
           background: "rgba(35,37,38,0.85)", // dark glass effect
           boxShadow: "0 4px 24px rgba(255,215,0,0.08)",
           backdropFilter: "blur(10px)",
@@ -68,7 +69,7 @@ const EditNote = () => {
         </Typography>
         <form
           onSubmit={handleUpdate}
-          style={{ display: "flex", flexDirection: "column", gap: 16 }}
+          style={{ display: "flex", flexDirection: "column", gap: 24 }} // increased gap for better spacing
         >
           <TextField
             label="Title"
@@ -85,10 +86,10 @@ const EditNote = () => {
               },
               "& .MuiInputLabel-root": {
                 color: "#fff",
+                fontSize: "1.2rem",
                 "&.Mui-focused": { color: "#fff" },
               },
             }}
-            required
           />
           <TextField
             label="Content"
@@ -96,21 +97,24 @@ const EditNote = () => {
             onChange={(e) => setContent(e.target.value)}
             fullWidth
             multiline
-            rows={4}
+            rows={1.5} // increase for more height
             sx={{
               "& .MuiOutlinedInput-root": {
                 color: "#fff",
                 "& fieldset": { borderColor: "#ffd700" },
                 "&:hover fieldset": { borderColor: "#fff" },
                 "&.Mui-focused fieldset": { borderColor: "#fff" },
-                "& input::placeholder": { color: "#fff", opacity: 1 },
+                "& textarea": {
+                  minHeight: 200, // increase height for textarea
+                  fontSize: "1.1rem",
+                },
               },
               "& .MuiInputLabel-root": {
                 color: "#fff",
+                fontSize: "1.1rem",
                 "&.Mui-focused": { color: "#fff" },
               },
             }}
-            required
           />
           <Button
             type="submit"
