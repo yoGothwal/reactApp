@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 import axios from "axios";
+const baseURL = import.meta.env.VITE_API_URL || "";
 
 const EditNote = () => {
   const { id } = useParams();
@@ -11,7 +12,7 @@ const EditNote = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/notes/${id}`, {
+      .get(`${baseURL}/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
@@ -27,7 +28,7 @@ const EditNote = () => {
     e.preventDefault();
     axios
       .put(
-        `/api/notes/${id}`,
+        `${baseURL}/api/notes/${id}`,
         { title, content },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
