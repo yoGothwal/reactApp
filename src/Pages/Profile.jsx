@@ -1,6 +1,6 @@
 import { Box, Typography, Avatar, Modal } from "@mui/material";
 import { useState } from "react";
-import LogoutButton from "../Components/LogOutButton";
+import LogOutButton from "../Components/LogOutButton";
 import profilePic from "../Images/pic.jpg";
 const Profile = () => {
   const [open, setOpen] = useState(false);
@@ -90,7 +90,7 @@ const Profile = () => {
       >
         {user.email}
       </Typography>
-      {isLoggedIn && <LogoutButton></LogoutButton>}
+      {isLoggedIn && <LogOutButton></LogOutButton>}
     </Box>
   );
 };
